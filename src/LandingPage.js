@@ -13,6 +13,8 @@ const styles = `
   }
   html { scroll-behavior: smooth; }
   body { background: var(--cream); font-family: var(--font-body); color: var(--ink); overflow-x: hidden; }
+
+  /* NAV */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 48px; height: 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(244,240,232,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
   .nav-logo { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--ink); }
   .nav-logo span { color: var(--green); }
@@ -21,52 +23,72 @@ const styles = `
   .nav-link:hover { color: var(--ink); }
   .nav-cta { font-family: var(--font-mono); font-size: 12px; background: var(--ink); color: var(--cream); padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; transition: background 0.15s; }
   .nav-cta:hover { background: var(--green); }
-  .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 48px 80px; position: relative; overflow: hidden; }
-  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(45,106,79,0.06) 0%, transparent 70%); pointer-events: none; }
-  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.4; pointer-events: none; }
-  .hero-content { max-width: 680px; position: relative; animation: fadeUp 0.8s ease both; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 100px 48px 60px; position: relative; overflow: hidden; gap: 60px; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(45,106,79,0.05) 0%, transparent 70%); pointer-events: none; }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.35; pointer-events: none; }
+  .hero-content { position: relative; animation: fadeUp 0.8s ease both; }
   .hero-eyebrow { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--green); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
   .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--green); }
-  .hero-title { font-family: var(--font-display); font-size: clamp(44px, 6vw, 78px); font-weight: 600; line-height: 1.05; color: var(--ink); margin-bottom: 28px; letter-spacing: -2px; }
+  .hero-title { font-family: var(--font-display); font-size: clamp(40px, 4.5vw, 72px); font-weight: 600; line-height: 1.05; color: var(--ink); margin-bottom: 24px; letter-spacing: -2px; }
   .hero-title em { font-style: italic; color: var(--green); font-weight: 400; }
-  .hero-sub { font-size: 18px; line-height: 1.7; color: var(--ink-light); max-width: 520px; margin-bottom: 16px; font-weight: 300; }
-  .hero-data-line { font-size: 14px; line-height: 1.65; color: var(--ink-muted); max-width: 520px; margin-bottom: 40px; font-weight: 300; }
-  .hero-actions { display: flex; gap: 16px; align-items: center; }
-  .btn-primary { font-family: var(--font-mono); font-size: 13px; background: var(--ink); color: var(--cream); padding: 14px 32px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
+  .hero-sub { font-size: 17px; line-height: 1.7; color: var(--ink-light); margin-bottom: 14px; font-weight: 300; }
+  .hero-data-line { font-size: 13px; line-height: 1.65; color: var(--ink-muted); margin-bottom: 36px; font-weight: 300; }
+  .hero-actions { display: flex; gap: 12px; align-items: center; margin-bottom: 48px; }
+  .btn-primary { font-family: var(--font-mono); font-size: 13px; background: var(--ink); color: var(--cream); padding: 13px 28px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
   .btn-primary:hover { background: var(--green); transform: translateY(-1px); }
-  .btn-secondary { font-family: var(--font-mono); font-size: 13px; color: var(--ink); padding: 14px 32px; border-radius: 4px; border: 1px solid var(--border); background: transparent; cursor: pointer; transition: all 0.2s; }
+  .btn-secondary { font-family: var(--font-mono); font-size: 13px; color: var(--ink); padding: 13px 28px; border-radius: 4px; border: 1px solid var(--border); background: transparent; cursor: pointer; transition: all 0.2s; }
   .btn-secondary:hover { border-color: var(--ink); }
-  .hero-stats { display: flex; gap: 48px; margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--border); }
-  .hero-stat-value { font-family: var(--font-display); font-size: 36px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 6px; }
-  .hero-stat-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-muted); }
-  .hero-right { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 500px; animation: fadeLeft 1s 0.3s ease both; }
-  .mockup { background: white; border-radius: 12px; box-shadow: 0 32px 80px rgba(26,24,20,0.15), 0 0 0 1px var(--border); overflow: hidden; }
-  .mockup-bar { background: #F8F7F4; border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
-  .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .mockup-url { flex: 1; background: var(--cream); border-radius: 4px; padding: 4px 10px; font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted); margin: 0 12px; }
-  .mockup-body { padding: 20px; display: grid; grid-template-columns: 150px 1fr; gap: 14px; height: 300px; }
-  .mockup-sidebar { display: flex; flex-direction: column; gap: 8px; }
-  .mockup-site { background: var(--cream); border-radius: 6px; padding: 10px; border: 1px solid var(--border); }
-  .mockup-site.active { background: #EBF0F7; border-color: #2C4A6E; }
-  .mockup-site-name { font-size: 9px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
-  .mockup-site-price { font-family: var(--font-mono); font-size: 11px; color: #2C4A6E; }
-  .mockup-main { display: flex; flex-direction: column; gap: 10px; }
-  .mockup-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .mockup-metric { background: var(--cream); border-radius: 6px; padding: 10px; border: 1px solid var(--border); }
-  .mockup-metric-label { font-family: var(--font-mono); font-size: 8px; color: var(--ink-muted); text-transform: uppercase; margin-bottom: 4px; }
-  .mockup-metric-val { font-family: var(--font-mono); font-size: 14px; font-weight: 500; color: var(--ink); }
-  .mockup-metric.green .mockup-metric-val { color: var(--green); }
-  .mockup-chart { background: var(--cream); border-radius: 6px; padding: 12px; border: 1px solid var(--border); flex: 1; }
-  .mockup-chart-label { font-family: var(--font-mono); font-size: 8px; color: var(--ink-muted); margin-bottom: 10px; }
-  .mockup-chart-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-  .mockup-chart-name { font-size: 8px; color: var(--ink-light); width: 72px; }
-  .mockup-chart-track { flex: 1; background: var(--border); border-radius: 2px; height: 5px; }
-  .mockup-chart-fill { height: 5px; border-radius: 2px; }
-  .mockup-chart-val { font-family: var(--font-mono); font-size: 8px; color: var(--ink-muted); width: 36px; text-align: right; }
-  .logos { padding: 40px 48px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--cream-dark); }
-  .logos-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-muted); text-align: center; margin-bottom: 24px; }
+  .hero-stats { display: flex; gap: 36px; padding-top: 36px; border-top: 1px solid var(--border); }
+  .hero-stat-value { font-family: var(--font-display); font-size: 32px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 5px; }
+  .hero-stat-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-muted); }
+
+  /* DASHBOARD PANELS */
+  .hero-panels { position: relative; display: flex; flex-direction: column; gap: 12px; animation: fadeUp 0.9s 0.15s ease both; }
+  .panel { background: white; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(26,24,20,0.07); overflow: hidden; }
+  .panel-header { padding: 10px 14px; border-bottom: 1px solid var(--border); background: #FAFAF7; display: flex; align-items: center; justify-content: space-between; }
+  .panel-title { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--ink-muted); }
+  .panel-badge { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 3px; }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-amber { background: #F7F0E0; color: #92660A; }
+
+  /* PANEL 1 - APPRAISAL METRICS */
+  .panel-metrics { padding: 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .pm { padding: 10px 12px; border-radius: 6px; background: var(--cream); border: 1px solid var(--border); }
+  .pm-label { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-muted); margin-bottom: 5px; }
+  .pm-value { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--ink); }
+  .pm-value.green { color: var(--green); }
+  .pm-value.blue { color: #2C4A6E; }
+  .pm-sub { font-size: 9px; color: var(--ink-muted); margin-top: 2px; }
+
+  /* PANEL 2 - COST BREAKDOWN */
+  .panel-costs { padding: 14px; }
+  .cost-row-p { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .cost-row-p:last-child { margin-bottom: 0; }
+  .cr-label { font-size: 11px; color: var(--ink-light); width: 130px; min-width: 130px; }
+  .cr-track { flex: 1; background: var(--border); border-radius: 2px; height: 5px; }
+  .cr-fill { height: 5px; border-radius: 2px; }
+  .cr-val { font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted); width: 48px; text-align: right; }
+
+  /* PANEL 3 - SENSITIVITY */
+  .panel-sens { padding: 14px; }
+  .sens-label { font-family: var(--font-mono); font-size: 9px; color: var(--ink-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sens-row { display: flex; gap: 4px; margin-bottom: 4px; }
+  .sens-cell-p { flex: 1; padding: 6px 4px; text-align: center; border-radius: 3px; font-family: var(--font-mono); font-size: 10px; font-weight: 500; }
+
+  /* PANEL 4 - CASHFLOW MINI */
+  .panel-cf { padding: 14px; display: flex; gap: 8px; align-items: flex-end; height: 72px; }
+  .cf-bar-wrap { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; }
+  .cf-bar { border-radius: 2px 2px 0 0; width: 100%; transition: height 0.3s; }
+
+  /* LOGOS */
+  .logos { padding: 36px 48px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--cream-dark); }
+  .logos-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink-muted); text-align: center; margin-bottom: 20px; }
   .logos-row { display: flex; justify-content: center; align-items: center; gap: 48px; flex-wrap: wrap; }
   .logo-item { font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--ink-muted); opacity: 0.6; }
+
+  /* HOW */
   .how { padding: 120px 48px; }
   .section-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--green); margin-bottom: 16px; }
   .section-title { font-family: var(--font-display); font-size: clamp(32px, 4vw, 52px); font-weight: 600; color: var(--ink); letter-spacing: -1.5px; margin-bottom: 16px; line-height: 1.1; }
@@ -78,6 +100,8 @@ const styles = `
   .step-title { font-family: var(--font-display); font-size: 19px; font-weight: 500; color: var(--ink); margin-bottom: 10px; }
   .step-desc { font-size: 14px; color: var(--ink-light); line-height: 1.65; font-weight: 300; }
   .step-tag { display: inline-block; font-family: var(--font-mono); font-size: 10px; background: var(--green-light); color: var(--green); padding: 4px 10px; border-radius: 3px; margin-top: 14px; }
+
+  /* FEATURES */
   .features { padding: 120px 48px; background: var(--ink); }
   .features .section-label { color: var(--green-mid); }
   .features .section-title { color: var(--cream); }
@@ -89,6 +113,8 @@ const styles = `
   .feature-icon svg { width: 26px; height: 26px; stroke: var(--green-mid); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
   .feature-title { font-family: var(--font-display); font-size: 19px; font-weight: 500; color: var(--cream); margin-bottom: 10px; }
   .feature-desc { font-size: 14px; color: rgba(244,240,232,0.55); line-height: 1.7; font-weight: 300; }
+
+  /* PRICING */
   .pricing { padding: 120px 48px; }
   .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 960px; }
   .price-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 40px 36px; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
@@ -107,6 +133,8 @@ const styles = `
   .price-btn:hover { border-color: var(--ink); }
   .price-btn.featured-btn { background: var(--ink); color: var(--cream); border-color: var(--ink); }
   .price-btn.featured-btn:hover { background: var(--green); border-color: var(--green); }
+
+  /* WAITLIST */
   .waitlist { padding: 120px 48px; background: var(--cream-dark); border-top: 1px solid var(--border); }
   .waitlist-inner { max-width: 560px; }
   .waitlist-title { font-family: var(--font-display); font-size: clamp(32px, 4vw, 52px); font-weight: 600; color: var(--ink); letter-spacing: -1.5px; margin-bottom: 16px; line-height: 1.1; }
@@ -119,15 +147,34 @@ const styles = `
   .waitlist-btn:hover { background: var(--green); }
   .waitlist-note { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); margin-top: 14px; }
   .success-msg { background: var(--green-light); border: 1px solid var(--green); border-radius: 4px; padding: 14px 20px; font-size: 14px; color: var(--green); margin-top: 16px; }
+
+  /* FOOTER */
   .footer { padding: 40px 48px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
   .footer-logo { font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--ink); }
   .footer-logo span { color: var(--green); }
   .footer-copy { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
+
   @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeLeft { from { opacity: 0; transform: translate(40px, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
-  @media (max-width: 1100px) { .hero-right { display: none; } .steps { grid-template-columns: repeat(2, 1fr); } .features-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 768px) { .nav { padding: 0 24px; } .hero, .how, .features, .pricing, .waitlist { padding: 80px 24px; } .hero { padding-top: 100px; } .steps, .features-grid, .pricing-grid { grid-template-columns: 1fr; } .waitlist-form { flex-direction: column; } .hero-stats { gap: 28px; flex-wrap: wrap; } .footer { flex-direction: column; gap: 16px; text-align: center; } }
+  @media (max-width: 1100px) { .hero { grid-template-columns: 1fr; } .hero-panels { display: none; } .steps { grid-template-columns: repeat(2, 1fr); } .features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .nav { padding: 0 24px; } .hero, .how, .features, .pricing, .waitlist { padding: 80px 24px; } .hero { padding-top: 100px; } .steps, .features-grid, .pricing-grid { grid-template-columns: 1fr; } .waitlist-form { flex-direction: column; } .hero-stats { gap: 24px; flex-wrap: wrap; } .footer { flex-direction: column; gap: 16px; text-align: center; } }
 `;
+
+const sensCells = [
+  [{v:"9.1%",t:"r"},{v:"12.4%",t:"r"},{v:"15.8%",t:"g"},{v:"19.1%",t:"g"},{v:"22.3%",t:"g"}],
+  [{v:"6.2%",t:"a"},{v:"9.5%",t:"r"},{v:"12.9%",t:"r"},{v:"16.2%",t:"g"},{v:"19.4%",t:"g"}],
+  [{v:"3.1%",t:"a"},{v:"6.4%",t:"a"},{v:"9.8%",t:"r"},{v:"13.1%",t:"r"},{v:"16.3%",t:"g"}],
+  [{v:"-0.1%",t:"x"},{v:"3.2%",t:"a"},{v:"6.6%",t:"a"},{v:"9.9%",t:"r"},{v:"13.1%",t:"r"}],
+  [{v:"-3.2%",t:"x"},{v:"0.1%",t:"x"},{v:"3.5%",t:"a"},{v:"6.8%",t:"a"},{v:"10.0%",t:"r"}],
+];
+
+const sensColor = (t) => ({
+  g: {background:"#E8F2EC",color:"#2D6A4F"},
+  r: {background:"#EBF0F7",color:"#2C4A6E"},
+  a: {background:"#F7F0E0",color:"#92660A"},
+  x: {background:"#F7EBEB",color:"#8B3A3A"},
+}[t]);
+
+const cfBars = [12,18,28,42,58,72,81,88,91,88,80,65,44,20,-8,-42,-80,-120];
 
 export default function LandingPage({ onEnterApp }) {
   const [email, setEmail] = useState("");
@@ -149,6 +196,8 @@ export default function LandingPage({ onEnterApp }) {
 
       <section className="hero">
         <div className="hero-bg" /><div className="hero-grid" />
+
+        {/* LEFT — COPY */}
         <div className="hero-content">
           <div className="hero-eyebrow">Development Intelligence for Ireland</div>
           <h1 className="hero-title">Know if a site<br /><em>stacks up</em><br />in minutes.</h1>
@@ -164,47 +213,101 @@ export default function LandingPage({ onEnterApp }) {
           </div>
           <div className="hero-stats">
             <div><div className="hero-stat-value">26</div><div className="hero-stat-label">Counties covered</div></div>
-            <div><div className="hero-stat-value">5 min</div><div className="hero-stat-label">Average appraisal time</div></div>
-            <div><div className="hero-stat-value">16</div><div className="hero-stat-label">Cost elements in breakdown</div></div>
+            <div><div className="hero-stat-value">5 min</div><div className="hero-stat-label">Appraisal time</div></div>
+            <div><div className="hero-stat-value">16</div><div className="hero-stat-label">Cost elements</div></div>
           </div>
         </div>
-        <div className="hero-right">
-          <div className="mockup">
-            <div className="mockup-bar">
-              <div className="mockup-dot" style={{background:"#FF5F57"}}/><div className="mockup-dot" style={{background:"#FEBC2E"}}/><div className="mockup-dot" style={{background:"#28C840"}}/>
-              <div className="mockup-url">feasa.ie/dashboard</div>
+
+        {/* RIGHT — MULTIPLE PANELS */}
+        <div className="hero-panels">
+
+          {/* PANEL 1: Appraisal metrics */}
+          <div className="panel">
+            <div className="panel-header">
+              <span className="panel-title">Ballycullen Road, Dublin 16 — Appraisal</span>
+              <span className="panel-badge badge-green">Strongly Viable</span>
             </div>
-            <div className="mockup-body">
-              <div className="mockup-sidebar">
-                {["Ballycullen Rd","Blessington Rd","Carrigtwohill","Wine St, Sligo"].map((s,i)=>(
-                  <div key={i} className={`mockup-site ${i===0?"active":""}`}>
-                    <div className="mockup-site-name">{s}</div>
-                    <div className="mockup-site-price">{["€4.20m","€1.85m","€2.90m","€620k"][i]}</div>
+            <div className="panel-metrics">
+              <div className="pm"><div className="pm-label">GDV</div><div className="pm-value blue">€37.9m</div><div className="pm-sub">Net €36.8m</div></div>
+              <div className="pm"><div className="pm-label">Profit on GDV</div><div className="pm-value green">18.4%</div><div className="pm-sub">Target ≥15%</div></div>
+              <div className="pm"><div className="pm-label">IRR</div><div className="pm-value green">22.1%</div><div className="pm-sub">Equity IRR</div></div>
+              <div className="pm"><div className="pm-label">Equity Multiple</div><div className="pm-value">1.94x</div><div className="pm-sub">ROE 38.2%</div></div>
+            </div>
+          </div>
+
+          {/* PANEL 2: Cost breakdown */}
+          <div className="panel">
+            <div className="panel-header">
+              <span className="panel-title">Cost Breakdown</span>
+              <span className="panel-badge badge-amber">Total €30.9m</span>
+            </div>
+            <div className="panel-costs">
+              {[
+                {label:"Construction",val:"€19.1m",w:92,c:"#2C4A6E"},
+                {label:"Professional Fees",val:"€2.5m",w:32,c:"#4A9B73"},
+                {label:"Development Finance",val:"€1.8m",w:24,c:"#8B3A3A"},
+                {label:"Statutory Levies",val:"€1.2m",w:16,c:"#92660A"},
+                {label:"Land Acquisition",val:"€4.2m",w:48,c:"#6B6459"},
+                {label:"VAT + Marketing",val:"€2.1m",w:28,c:"#A0856C"},
+              ].map((r,i)=>(
+                <div key={i} className="cost-row-p">
+                  <div className="cr-label">{r.label}</div>
+                  <div className="cr-track"><div className="cr-fill" style={{width:`${r.w}%`,background:r.c}}/></div>
+                  <div className="cr-val">{r.val}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* PANELS 3+4 side by side */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+
+            {/* PANEL 3: Sensitivity */}
+            <div className="panel">
+              <div className="panel-header">
+                <span className="panel-title">Sensitivity — Profit on GDV</span>
+              </div>
+              <div className="panel-sens">
+                <div className="sens-label">Revenue vs Cost variation</div>
+                {sensCells.map((row,i)=>(
+                  <div key={i} className="sens-row">
+                    {row.map((cell,j)=>(
+                      <div key={j} className="sens-cell-p" style={sensColor(cell.t)}>{cell.v}</div>
+                    ))}
                   </div>
                 ))}
               </div>
-              <div className="mockup-main">
-                <div className="mockup-metrics">
-                  <div className="mockup-metric green"><div className="mockup-metric-label">Profit/GDV</div><div className="mockup-metric-val">18.4%</div></div>
-                  <div className="mockup-metric"><div className="mockup-metric-label">IRR</div><div className="mockup-metric-val">22.1%</div></div>
-                  <div className="mockup-metric"><div className="mockup-metric-label">GDV</div><div className="mockup-metric-val">€37.9m</div></div>
-                </div>
-                <div className="mockup-chart">
-                  <div className="mockup-chart-label">Cost Breakdown</div>
-                  {[{label:"Construction",val:"€19.1m",w:85,c:"#2C4A6E"},{label:"Prof. Fees",val:"€2.5m",w:35,c:"#4A9B73"},{label:"Finance",val:"€1.8m",w:25,c:"#8B3A3A"},{label:"Statutory",val:"€1.2m",w:18,c:"#92660A"}].map((b,i)=>(
-                    <div key={i} className="mockup-chart-row">
-                      <div className="mockup-chart-name">{b.label}</div>
-                      <div className="mockup-chart-track"><div className="mockup-chart-fill" style={{width:`${b.w}%`,background:b.c}}/></div>
-                      <div className="mockup-chart-val">{b.val}</div>
+            </div>
+
+            {/* PANEL 4: Key metrics */}
+            <div className="panel">
+              <div className="panel-header">
+                <span className="panel-title">Key Metrics</span>
+              </div>
+              <div style={{padding:"14px"}}>
+                {[
+                  {label:"Residual Land Value",val:"€4.62m",sub:"Ask: €4.20m ✓"},
+                  {label:"NPV (8% discount)",val:"€4.1m",sub:"Positive"},
+                  {label:"Equity Required",val:"€10.8m",sub:"65% LTC debt"},
+                  {label:"Peak Funding",val:"€18.4m",sub:"Month 18"},
+                  {label:"Profit Erosion",val:"6.2 months",sub:"Cost overrun buffer"},
+                ].map((m,i)=>(
+                  <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"7px 0",borderBottom:i<4?"1px solid var(--border)":"none"}}>
+                    <div style={{fontSize:11,color:"var(--ink-light)"}}>{m.label}</div>
+                    <div style={{textAlign:"right"}}>
+                      <div style={{fontFamily:"var(--font-mono)",fontSize:12,fontWeight:500,color:"var(--ink)"}}>{m.val}</div>
+                      <div style={{fontFamily:"var(--font-mono)",fontSize:9,color:"var(--ink-muted)"}}>{m.sub}</div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
+      {/* DATA SOURCES */}
       <div className="logos">
         <div className="logos-label">Built on Irish data sources</div>
         <div className="logos-row">
@@ -212,16 +315,17 @@ export default function LandingPage({ onEnterApp }) {
         </div>
       </div>
 
+      {/* HOW IT WORKS */}
       <section className="how" id="how">
         <div className="section-label">How it works</div>
         <h2 className="section-title">From site to appraisal<br />in four steps.</h2>
         <p className="section-sub">Stop piecing together spreadsheets and PDFs. Feasa gives you a structured starting point for any Irish site, with every figure editable to your own assumptions.</p>
         <div className="steps">
           {[
-            {num:"01",title:"Select your site",desc:"Choose from live Irish development sites or input your own location, size and zoning. The platform sets up the appraisal framework instantly.",tag:"Any Irish location"},
+            {num:"01",title:"Select your site",desc:"Choose from live Irish development sites or input your own location, size and zoning. The appraisal framework is set up instantly.",tag:"Any Irish location"},
             {num:"02",title:"Review the benchmarks",desc:"Construction costs, revenue estimates and statutory charges are pre-loaded based on Irish data. You are never starting from zero.",tag:"Pre-loaded Irish data"},
             {num:"03",title:"Edit to your numbers",desc:"Swap in your own build costs, sale prices, finance rates or unit mix. Every figure is editable and the model updates instantly.",tag:"Fully editable"},
-            {num:"04",title:"Read your appraisal",desc:"Get a full development appraisal — profit on GDV, IRR, NPV, residual land value, monthly cash flow and sensitivity analysis — in minutes, not weeks.",tag:"Institutional grade output"},
+            {num:"04",title:"Read your appraisal",desc:"Profit on GDV, IRR, NPV, residual land value, monthly cash flow and sensitivity analysis — in minutes, not weeks.",tag:"Institutional grade output"},
           ].map((s,i)=>(
             <div key={i} className="step">
               <div className="step-num">{s.num}</div>
@@ -233,6 +337,7 @@ export default function LandingPage({ onEnterApp }) {
         </div>
       </section>
 
+      {/* FEATURES */}
       <section className="features">
         <div className="section-label">What is included</div>
         <h2 className="section-title">Not a replacement for your QS.<br />A faster way to know if a site<br />is worth one.</h2>
@@ -255,6 +360,7 @@ export default function LandingPage({ onEnterApp }) {
         </div>
       </section>
 
+      {/* PRICING */}
       <section className="pricing" id="pricing">
         <div className="section-label">Pricing</div>
         <h2 className="section-title">Simple, transparent pricing.</h2>
@@ -280,6 +386,7 @@ export default function LandingPage({ onEnterApp }) {
         </div>
       </section>
 
+      {/* WAITLIST */}
       <section className="waitlist" id="waitlist">
         <div className="waitlist-inner">
           <div className="section-label">Early access</div>
