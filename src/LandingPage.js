@@ -174,7 +174,7 @@ const sensColor = (t) => ({
   x: {background:"#F7EBEB",color:"#8B3A3A"},
 }[t]);
 
-
+const cfBars = [12,18,28,42,58,72,81,88,91,88,80,65,44,20,-8,-42,-80,-120];
 
 export default function LandingPage({ onEnterApp }) {
   const [email, setEmail] = useState("");
@@ -199,7 +199,7 @@ export default function LandingPage({ onEnterApp }) {
 
         {/* LEFT — COPY */}
         <div className="hero-content">
-          <div className="hero-eyebrow">Development Intelligence for Ireland</div>
+          <div className="hero-eyebrow">Property development feasibility software, built for Ireland.</div>
           <h1 className="hero-title">Know if a site<br /><em>stacks up</em><br />in minutes.</h1>
           <p className="hero-sub">
             Feasa gives you an instant development appraisal for any Irish site. Input a location and building type and get construction cost estimates, revenue projections, cash flow and returns straight away. Benchmarks are pre-loaded so you are never starting from a blank spreadsheet and every figure is yours to edit.
