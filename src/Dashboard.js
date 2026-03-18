@@ -500,8 +500,8 @@ function SiteLayout({ site, params, fmt }) {
   const W = 680, H = 520, PAD = 40;
   const plotW = W - PAD * 2;
   const plotH = H - PAD * 2;
-  const buildingType = (params && params.buildingType) ? params.buildingType : site.buildingType;
-  const units = (params && params.units) ? params.units : site.units;
+  const buildingType = (params && Object.keys(params).length > 0 && params.buildingType) ? params.buildingType : site.buildingType;
+  const units = (params && Object.keys(params).length > 0 && params.units) ? params.units : site.units;
   const isApts = buildingType === "Apartments";
   const isMixed = buildingType === "Mixed (Houses & Apts)";
 
@@ -1102,7 +1102,6 @@ export default function Dashboard({ onBack }) {
               {/* SITE LAYOUT TAB */}
               {activeTab === "layout" && site && (
                 <SiteLayout site={site} params={params} fmt={fmt} />
-              )}
               )}
             </>
           )}
