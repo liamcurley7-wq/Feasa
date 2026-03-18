@@ -1101,7 +1101,7 @@ export default function Dashboard({ onBack }) {
 
               {/* SITE LAYOUT TAB */}
               {activeTab === "layout" && site && (
-                <SiteLayout site={site} params={params} fmt={fmt} />
+                <SiteLayout site={site} params={params || {}} fmt={fmt} />
               )}
             </>
           )}
