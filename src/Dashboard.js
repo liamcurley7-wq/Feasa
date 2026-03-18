@@ -970,7 +970,7 @@ export default function Dashboard({ onBack }) {
                   </div>
 
               {/* SITE LAYOUT TAB */}
-              {activeTab === "layout" && site && (() => {
+              {activeTab === "layout" && site && params && (() => {
                 const W = 680, H = 520;
                 const PAD = 40;
                 const plotW = W - PAD * 2;
