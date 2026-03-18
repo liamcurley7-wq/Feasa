@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, Cell } from "recharts";
 
 const GOOGLE_FONTS = `
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Mono:wght@300;400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap');
@@ -495,7 +495,7 @@ function calcMetrics(site, params) {
   };
 }
 
-export default function App() {
+export default function Dashboard({ onBack }) {
   const [selectedId, setSelectedId] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [filter, setFilter] = useState("All");
@@ -516,7 +516,7 @@ export default function App() {
         discountRate: site.discountRate,
       });
     }
-  }, [selectedId, site]);
+  }, [selectedId]);
 
   const metrics = site && Object.keys(params).length ? calcMetrics(site, params) : null;
 
@@ -532,7 +532,10 @@ export default function App() {
       <style>{styles}</style>
 
       <header className="header">
-        <div className="header-logo">Feasa<span>.</span>ie</div>
+        <div style={{display:"flex",alignItems:"center",gap:"16px"}}>
+                  <button onClick={onBack} style={{fontFamily:"var(--font-mono)",fontSize:"12px",background:"transparent",border:"1px solid var(--border)",borderRadius:"4px",padding:"6px 14px",cursor:"pointer",color:"var(--text-secondary)"}}>← Back</button>
+                  <div className="header-logo">Feasa<span>.</span>ie</div>
+                </div>
         <div className="header-nav">
           <span className="header-badge">Ireland Beta</span>
         </div>
@@ -967,7 +970,7 @@ export default function App() {
                   </div>
 
               {/* SITE LAYOUT TAB */}
-              {activeTab === "layout" && metrics && (() => {
+              {activeTab === "layout" && site && (() => {
                 const W = 680, H = 520;
                 const PAD = 40;
                 const plotW = W - PAD * 2;
