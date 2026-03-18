@@ -174,7 +174,7 @@ const sensColor = (t) => ({
   x: {background:"#F7EBEB",color:"#8B3A3A"},
 }[t]);
 
-const cfBars = [12,18,28,42,58,72,81,88,91,88,80,65,44,20,-8,-42,-80,-120];
+
 
 export default function LandingPage({ onEnterApp }) {
   const [email, setEmail] = useState("");
