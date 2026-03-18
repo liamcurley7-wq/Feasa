@@ -495,6 +495,136 @@ function calcMetrics(site, params) {
   };
 }
 
+
+function SiteLayout({ site, params, fmt }) {
+  const W = 680, H = 520, PAD = 40;
+  const plotW = W - PAD * 2;
+  const plotH = H - PAD * 2;
+  const buildingType = (params && params.buildingType) ? params.buildingType : site.buildingType;
+  const units = (params && params.units) ? params.units : site.units;
+  const isApts = buildingType === "Apartments";
+  const isMixed = buildingType === "Mixed (Houses & Apts)";
+
+  const roadH = 28;
+  const setback = 18;
+  const innerX = PAD + setback;
+  const innerY = PAD + roadH + setback;
+  const innerW = plotW - setback * 2;
+  const innerH = plotH - roadH - setback * 2;
+
+  const buildings = [];
+
+  if (isApts) {
+    const floors = units <= 40 ? 4 : units <= 80 ? 6 : 8;
+    const blockCount = Math.min(Math.ceil(units / (floors * 10)), 3);
+    const blockW = (innerW - (blockCount - 1) * 16) / blockCount;
+    const blockH = Math.min(innerH * 0.5, 90);
+    for (let i = 0; i < blockCount; i++) {
+      buildings.push({ type: "apt", x: innerX + i * (blockW + 16), y: innerY + 10, w: blockW, h: blockH, label: "Block " + String.fromCharCode(65 + i), floors });
+    }
+  } else if (isMixed) {
+    buildings.push({ type: "apt", x: innerX, y: innerY + 10, w: innerW * 0.42, h: 85, label: "Apt Block A", floors: 5 });
+    const houseCount = Math.ceil(units * 0.6);
+    const hW = 32, hH = 28, hGap = 6;
+    const cols = Math.floor((innerW * 0.52 - 8) / (hW + hGap));
+    for (let idx = 0; idx < houseCount; idx++) {
+      const r = Math.floor(idx / cols);
+      const col = idx % cols;
+      buildings.push({ type: "house", x: innerX + innerW * 0.46 + col * (hW + hGap), y: innerY + 10 + r * (hH + hGap), w: hW, h: hH });
+    }
+  } else {
+    const hW = 34, hH = 30, hGap = 5, rowGap = 22;
+    const cols = Math.floor(innerW / (hW + hGap));
+    for (let idx = 0; idx < units; idx++) {
+      const r = Math.floor(idx / cols);
+      const col = idx % cols;
+      buildings.push({ type: "house", x: innerX + col * (hW + hGap), y: innerY + 10 + r * (hH + rowGap), w: hW, h: hH });
+    }
+  }
+
+  const parkingY = innerY + innerH - 38;
+  const parkingW = innerW * 0.4;
+  const openX = innerX + innerW * 0.45;
+  const openW = innerW * 0.35;
+
+  return (
+    <>
+      <div className="card">
+        <div className="card-title">Indicative Site Layout — {site.name}</div>
+        <div style={{ background: "#f8f6f2", borderRadius: 6, padding: "6px 12px", marginBottom: 16, fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+          Schematic diagram only. Not to scale. Not for planning or architectural use.
+        </div>
+        <svg width="100%" viewBox={"0 0 " + W + " " + H} style={{ border: "1px solid var(--border)", borderRadius: 8, background: "#F9F7F2" }}>
+          <rect x={PAD} y={PAD} width={plotW} height={plotH} fill="#EAE8E0" stroke="#C8C3B8" strokeWidth="2" rx="4"/>
+          <text x={PAD + 8} y={PAD + 16} fontSize="10" fill="#9C9186" fontFamily="DM Mono, monospace">{site.acres} acres · {units} units · {buildingType}</text>
+          <rect x={PAD} y={PAD + plotH - roadH} width={plotW} height={roadH} fill="#C8C3B8" rx="2"/>
+          <text x={PAD + plotW / 2} y={PAD + plotH - roadH / 2 + 4} fontSize="9" fill="#6B6459" fontFamily="DM Mono, monospace" textAnchor="middle">ACCESS ROAD</text>
+          <rect x={innerX} y={innerY} width={innerW} height={innerH - 38} fill="none" stroke="#C8C3B8" strokeWidth="1" strokeDasharray="4,4" rx="2"/>
+          {buildings.map((b, i) => (
+            b.type === "apt" ? (
+              <g key={i}>
+                <rect x={b.x} y={b.y} width={b.w} height={b.h} fill="#2C4A6E" rx="3" opacity="0.85"/>
+                {Array.from({length: b.floors - 1}).map((_, f) => (
+                  <line key={f} x1={b.x + 2} y1={b.y + (b.h / b.floors) * (f + 1)} x2={b.x + b.w - 2} y2={b.y + (b.h / b.floors) * (f + 1)} stroke="white" strokeWidth="0.5" opacity="0.3"/>
+                ))}
+                <text x={b.x + b.w / 2} y={b.y + b.h + 14} fontSize="9" fill="#2C4A6E" fontFamily="DM Mono, monospace" textAnchor="middle">{b.label} · {b.floors} storeys</text>
+              </g>
+            ) : (
+              <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} fill="#4A9B73" rx="2" opacity="0.8"/>
+            )
+          ))}
+          <rect x={innerX} y={parkingY} width={parkingW} height={32} fill="#D4CCBF" rx="2"/>
+          <text x={innerX + parkingW / 2} y={parkingY + 20} fontSize="9" fill="#6B6459" fontFamily="DM Mono, monospace" textAnchor="middle">PARKING</text>
+          <rect x={openX} y={parkingY} width={openW} height={32} fill="#A8D5B5" rx="2" opacity="0.8"/>
+          <text x={openX + openW / 2} y={parkingY + 20} fontSize="9" fill="#2D6A4F" fontFamily="DM Mono, monospace" textAnchor="middle">OPEN SPACE</text>
+          <g transform={"translate(" + (W - PAD - 20) + "," + (PAD + 20) + ")"}>
+            <circle cx="0" cy="0" r="14" fill="white" stroke="#C8C3B8" strokeWidth="1"/>
+            <polygon points="0,-10 4,4 0,1 -4,4" fill="#1A1814"/>
+            <text x="0" y="0" fontSize="8" fill="#1A1814" fontFamily="DM Mono, monospace" textAnchor="middle" dominantBaseline="middle">N</text>
+          </g>
+          <g transform={"translate(" + (PAD + 8) + "," + (H - 18) + ")"}>
+            <rect x="0" y="-8" width="10" height="10" fill="#2C4A6E" rx="1"/>
+            <text x="14" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Apartments</text>
+            <rect x="80" y="-8" width="10" height="10" fill="#4A9B73" rx="1"/>
+            <text x="94" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Houses</text>
+            <rect x="148" y="-8" width="10" height="10" fill="#D4CCBF" rx="1"/>
+            <text x="162" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Parking</text>
+            <rect x="210" y="-8" width="10" height="10" fill="#A8D5B5" rx="1"/>
+            <text x="224" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Open Space</text>
+          </g>
+        </svg>
+      </div>
+      <div className="metrics-grid">
+        <div className="metric-card blue">
+          <div className="metric-label">Site Area</div>
+          <div className="metric-value">{site.acres} ac</div>
+          <div className="metric-sub">{Math.round(site.acres * 4047).toLocaleString()} m²</div>
+        </div>
+        <div className="metric-card green">
+          <div className="metric-label">Units</div>
+          <div className="metric-value">{units}</div>
+          <div className="metric-sub">{buildingType}</div>
+        </div>
+        <div className="metric-card amber">
+          <div className="metric-label">Density</div>
+          <div className="metric-value">{Math.round(units / site.acres)}</div>
+          <div className="metric-sub">units per acre</div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-label">GFA</div>
+          <div className="metric-value">{((units * site.avgUnitSize) / 1000).toFixed(1)}k</div>
+          <div className="metric-sub">m² gross floor area</div>
+        </div>
+      </div>
+      <div className="card" style={{ background: "var(--accent-amber-light)", border: "1px solid var(--accent-amber)" }}>
+        <div style={{ fontSize: 13, color: "var(--accent-amber)", fontFamily: "var(--font-mono)" }}>
+          Schematic massing diagram for early-stage feasibility screening only. Not an architectural drawing. Not to scale. Do not use for planning applications, building regulations, or any professional or legal purpose. Always engage a registered architect for site layout and design.
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function Dashboard({ onBack }) {
   const [selectedId, setSelectedId] = useState(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -970,153 +1100,9 @@ export default function Dashboard({ onBack }) {
                   </div>
 
               {/* SITE LAYOUT TAB */}
-              {activeTab === "layout" && site && params && (() => {
-                const W = 680, H = 520;
-                const PAD = 40;
-                const plotW = W - PAD * 2;
-                const plotH = H - PAD * 2;
-                const buildingType = params.buildingType || site.buildingType;
-                const isApts = buildingType === "Apartments";
-                const isMixed = buildingType === "Mixed (Houses & Apts)";
-                const units = params.units || site.units || 40;
-
-                const roadH = 28;
-                const setback = 18;
-                const innerX = PAD + setback;
-                const innerY = PAD + roadH + setback;
-                const innerW = plotW - setback * 2;
-                const innerH = plotH - roadH - setback * 2;
-
-                const buildings = [];
-
-                if (isApts) {
-                  const floors = units <= 40 ? 4 : units <= 80 ? 6 : 8;
-                  const unitsPerBlock = Math.ceil(units / (floors * 2));
-                  const blockCount = Math.ceil(units / (floors * unitsPerBlock));
-                  const blockW = Math.min(innerW * 0.85, innerW / Math.max(1, blockCount - 1) - 16);
-                  const blockH = Math.min(innerH * 0.55, 90);
-                  for (let i = 0; i < Math.min(blockCount, 3); i++) {
-                    buildings.push({ type: "apt", x: innerX + i * (blockW + 16), y: innerY, w: blockW, h: blockH, label: `Block ${String.fromCharCode(65 + i)}`, floors });
-                  }
-                } else if (isMixed) {
-                  buildings.push({ type: "apt", x: innerX, y: innerY, w: innerW * 0.42, h: 85, label: "Apt Block A", floors: 5 });
-                  const houseCount = Math.ceil(units * 0.6);
-                  const hW = 32, hH = 28, hGap = 6;
-                  const cols = Math.floor((innerW * 0.52 - 8) / (hW + hGap));
-                  const rows = Math.ceil(houseCount / cols);
-                  for (let r = 0; r < rows; r++) {
-                    for (let c = 0; c < cols; c++) {
-                      const idx = r * cols + c;
-                      if (idx >= houseCount) break;
-                      buildings.push({ type: "house", x: innerX + innerW * 0.46 + c * (hW + hGap), y: innerY + r * (hH + hGap), w: hW, h: hH });
-                    }
-                  }
-                } else {
-                  const hW = 34, hH = 30, hGap = 5, rowGap = 22;
-                  const cols = Math.floor(innerW / (hW + hGap));
-                  const rows = Math.ceil(units / cols);
-                  for (let r = 0; r < rows; r++) {
-                    for (let c = 0; c < cols; c++) {
-                      const idx = r * cols + c;
-                      if (idx >= units) break;
-                      buildings.push({ type: "house", x: innerX + c * (hW + hGap), y: innerY + r * (hH + rowGap), w: hW, h: hH });
-                    }
-                  }
-                }
-
-                const parkingY = innerY + innerH - 36;
-                const parkingW = innerW * 0.4;
-                const openX = innerX + innerW * 0.45;
-                const openW = innerW * 0.35;
-
-                return (
-                  <>
-                    <div className="card">
-                      <div className="card-title">Indicative Site Layout — {site.name}</div>
-                      <div style={{ background: "#f8f6f2", borderRadius: 6, padding: "4px 12px 8px", marginBottom: 16, fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
-                        Schematic diagram only. Not to scale. Not for planning or architectural use.
-                      </div>
-                      <svg width="100%" viewBox={`0 0 ${W} ${H}`} style={{ border: "1px solid var(--border)", borderRadius: 8, background: "#F9F7F2" }}>
-                        <rect x={PAD} y={PAD} width={plotW} height={plotH} fill="#EAE8E0" stroke="#C8C3B8" strokeWidth="2" rx="4"/>
-                        <text x={PAD + 8} y={PAD + 16} fontSize="10" fill="#9C9186" fontFamily="DM Mono, monospace">{site.acres} acres</text>
-                        <rect x={PAD} y={PAD + plotH - roadH} width={plotW} height={roadH} fill="#C8C3B8" rx="2"/>
-                        <text x={PAD + plotW / 2} y={PAD + plotH - roadH / 2 + 4} fontSize="9" fill="#6B6459" fontFamily="DM Mono, monospace" textAnchor="middle">ACCESS ROAD</text>
-                        <rect x={innerX} y={innerY} width={innerW} height={innerH - 36} fill="none" stroke="#C8C3B8" strokeWidth="1" strokeDasharray="4,4" rx="2"/>
-                        {buildings.map((b, i) => (
-                          <g key={i}>
-                            {b.type === "apt" ? (
-                              <>
-                                <rect x={b.x} y={b.y} width={b.w} height={b.h} fill="#2C4A6E" rx="3" opacity="0.85"/>
-                                {Array.from({length: b.floors - 1}).map((_, f) => (
-                                  <line key={f} x1={b.x + 2} y1={b.y + (b.h / b.floors) * (f + 1)} x2={b.x + b.w - 2} y2={b.y + (b.h / b.floors) * (f + 1)} stroke="white" strokeWidth="0.5" opacity="0.3"/>
-                                ))}
-                                {Array.from({length: b.floors}).map((_, f) =>
-                                  Array.from({length: Math.floor(b.w / 18)}).map((_, w) => (
-                                    <rect key={`${f}-${w}`} x={b.x + 6 + w * 18} y={b.y + (b.h / b.floors) * f + 4} width={8} height={6} fill="white" opacity="0.25" rx="1"/>
-                                  ))
-                                )}
-                                <text x={b.x + b.w / 2} y={b.y + b.h + 12} fontSize="9" fill="#2C4A6E" fontFamily="DM Mono, monospace" textAnchor="middle">{b.label} · {b.floors} storeys</text>
-                              </>
-                            ) : (
-                              <rect x={b.x} y={b.y} width={b.w} height={b.h} fill="#4A9B73" rx="2" opacity="0.8"/>
-                            )}
-                          </g>
-                        ))}
-                        <rect x={innerX} y={parkingY} width={parkingW} height={32} fill="#D4CCBF" rx="2"/>
-                        {Array.from({length: Math.floor(parkingW / 14)}).map((_, i) => (
-                          <line key={i} x1={innerX + 14 + i * 14} y1={parkingY} x2={innerX + 14 + i * 14} y2={parkingY + 32} stroke="white" strokeWidth="0.8" opacity="0.5"/>
-                        ))}
-                        <text x={innerX + parkingW / 2} y={parkingY + 20} fontSize="9" fill="#6B6459" fontFamily="DM Mono, monospace" textAnchor="middle">PARKING</text>
-                        <rect x={openX} y={parkingY} width={openW} height={32} fill="#A8D5B5" rx="2" opacity="0.7"/>
-                        <text x={openX + openW / 2} y={parkingY + 20} fontSize="9" fill="#2D6A4F" fontFamily="DM Mono, monospace" textAnchor="middle">OPEN SPACE</text>
-                        <g transform={`translate(${W - PAD - 20}, ${PAD + 20})`}>
-                          <circle cx="0" cy="0" r="14" fill="white" stroke="#C8C3B8" strokeWidth="1"/>
-                          <polygon points="0,-10 4,4 0,1 -4,4" fill="#1A1814"/>
-                          <text x="0" y="0" fontSize="8" fill="#1A1814" fontFamily="DM Mono, monospace" textAnchor="middle" dominantBaseline="middle">N</text>
-                        </g>
-                        <g transform={`translate(${PAD + 8}, ${H - 18})`}>
-                          <rect x="0" y="-8" width="10" height="10" fill="#2C4A6E" rx="1"/>
-                          <text x="14" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Apartments</text>
-                          <rect x="80" y="-8" width="10" height="10" fill="#4A9B73" rx="1"/>
-                          <text x="94" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Houses</text>
-                          <rect x="148" y="-8" width="10" height="10" fill="#D4CCBF" rx="1"/>
-                          <text x="162" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Parking</text>
-                          <rect x="210" y="-8" width="10" height="10" fill="#A8D5B5" rx="1"/>
-                          <text x="224" y="0" fontSize="8" fill="#6B6459" fontFamily="DM Mono, monospace">Open Space</text>
-                        </g>
-                      </svg>
-                    </div>
-                    <div className="metrics-grid">
-                      <div className="metric-card blue">
-                        <div className="metric-label">Site Area</div>
-                        <div className="metric-value">{site.acres} ac</div>
-                        <div className="metric-sub">{(site.acres * 4047).toLocaleString()} m²</div>
-                      </div>
-                      <div className="metric-card green">
-                        <div className="metric-label">Units</div>
-                        <div className="metric-value">{units}</div>
-                        <div className="metric-sub">{params.buildingType}</div>
-                      </div>
-                      <div className="metric-card amber">
-                        <div className="metric-label">Density</div>
-                        <div className="metric-value">{Math.round(units / site.acres)}</div>
-                        <div className="metric-sub">units per acre</div>
-                      </div>
-                      <div className="metric-card">
-                        <div className="metric-label">GFA</div>
-                        <div className="metric-value">{((units * site.avgUnitSize) / 1000).toFixed(1)}k</div>
-                        <div className="metric-sub">m² gross floor area</div>
-                      </div>
-                    </div>
-                    <div className="card" style={{ background: "var(--accent-amber-light)", border: "1px solid var(--accent-amber)" }}>
-                      <div style={{ fontSize: 13, color: "var(--accent-amber)", fontFamily: "var(--font-mono)" }}>
-                        Schematic massing diagram for early-stage feasibility screening only. Not an architectural drawing. Not to scale. Do not use for planning applications, building regulations, or any professional or legal purpose. Always engage a registered architect for site layout and design.
-                      </div>
-                    </div>
-                  </>
-                );
-              })()}
-                </>
+              {activeTab === "layout" && site && (
+                <SiteLayout site={site} params={params} fmt={fmt} />
+              )}
               )}
             </>
           )}
