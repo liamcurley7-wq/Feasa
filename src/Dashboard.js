@@ -516,7 +516,7 @@ export default function App() {
         discountRate: site.discountRate,
       });
     }
-  }, [selectedId]);
+  }, [selectedId, site]);
 
   const metrics = site && Object.keys(params).length ? calcMetrics(site, params) : null;
 
