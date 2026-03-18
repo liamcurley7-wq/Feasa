@@ -1098,6 +1098,8 @@ export default function Dashboard({ onBack }) {
                       </tbody>
                     </table>
                   </div>
+                </>
+              )}
 
               {/* SITE LAYOUT TAB */}
               {activeTab === "layout" && site && (
