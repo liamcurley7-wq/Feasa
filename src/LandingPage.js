@@ -114,26 +114,6 @@ const styles = `
   .feature-title { font-family: var(--font-display); font-size: 19px; font-weight: 500; color: var(--cream); margin-bottom: 10px; }
   .feature-desc { font-size: 14px; color: rgba(244,240,232,0.55); line-height: 1.7; font-weight: 300; }
 
-  /* PRICING */
-  .pricing { padding: 120px 48px; }
-  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 960px; }
-  .price-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 40px 36px; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
-  .price-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,24,20,0.1); }
-  .price-card.featured { border-color: var(--green); border-width: 2px; }
-  .price-featured-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; background: var(--green); color: white; padding: 4px 14px; border-radius: 20px; white-space: nowrap; }
-  .price-tier { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-muted); margin-bottom: 16px; }
-  .price-amount { font-family: var(--font-display); font-size: 48px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 6px; }
-  .price-amount span { font-size: 20px; font-weight: 400; color: var(--ink-muted); vertical-align: super; font-family: var(--font-body); }
-  .price-period { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); margin-bottom: 24px; }
-  .price-desc { font-size: 14px; color: var(--ink-light); line-height: 1.6; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); font-weight: 300; }
-  .price-features { list-style: none; margin-bottom: 28px; }
-  .price-features li { font-size: 14px; color: var(--ink-light); padding: 6px 0; display: flex; align-items: center; gap: 10px; }
-  .price-features li::before { content: '✓'; color: var(--green); font-weight: 600; font-size: 13px; }
-  .price-btn { width: 100%; padding: 13px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); background: transparent; color: var(--ink); }
-  .price-btn:hover { border-color: var(--ink); }
-  .price-btn.featured-btn { background: var(--ink); color: var(--cream); border-color: var(--ink); }
-  .price-btn.featured-btn:hover { background: var(--green); border-color: var(--green); }
-
   /* WAITLIST */
   .waitlist { padding: 120px 48px; background: var(--cream-dark); border-top: 1px solid var(--border); }
   .waitlist-inner { max-width: 560px; }
@@ -174,7 +154,7 @@ const sensColor = (t) => ({
   x: {background:"#F7EBEB",color:"#8B3A3A"},
 }[t]);
 
-
+const cfBars = [12,18,28,42,58,72,81,88,91,88,80,65,44,20,-8,-42,-80,-120];
 
 export default function LandingPage({ onEnterApp }) {
   const [email, setEmail] = useState("");
@@ -188,7 +168,7 @@ export default function LandingPage({ onEnterApp }) {
         <div className="nav-logo">Feasa<span>.</span>ie</div>
         <div className="nav-links">
           <span className="nav-link" onClick={() => document.getElementById("how").scrollIntoView({ behavior: "smooth" })}>How it works</span>
-          <span className="nav-link" onClick={() => document.getElementById("pricing").scrollIntoView({ behavior: "smooth" })}>Pricing</span>
+          
           <span className="nav-link" onClick={() => document.getElementById("waitlist").scrollIntoView({ behavior: "smooth" })}>Early access</span>
           <button className="nav-cta" onClick={onEnterApp}>View Demo →</button>
         </div>
@@ -205,7 +185,7 @@ export default function LandingPage({ onEnterApp }) {
             Feasa gives you an instant development appraisal for any Irish site. Input a location and building type and get construction cost estimates, revenue projections, cash flow and returns straight away. Benchmarks are pre-loaded so you are never starting from a blank spreadsheet and every figure is yours to edit.
           </p>
           <p className="hero-data-line">
-            Built on Irish data including the Property Price Register, SCSI construction benchmarks, Local authority levies and more. Irish benchmarks pre-loaded — edit any figure to your own numbers in seconds.
+            Built on Irish data including the Property Price Register, construction cost benchmarks, Local authority levies and more. Irish benchmarks pre-loaded. Edit any figure to your own numbers in seconds.
           </p>
           <div className="hero-actions">
             <button className="btn-primary" onClick={onEnterApp}>Try the demo →</button>
@@ -361,31 +341,6 @@ export default function LandingPage({ onEnterApp }) {
       </section>
 
       {/* PRICING */}
-      <section className="pricing" id="pricing">
-        <div className="section-label">Pricing</div>
-        <h2 className="section-title">Simple, transparent pricing.</h2>
-        <p className="section-sub">No setup fees, no contracts. Cancel anytime. Early access pricing locked in for founding customers.</p>
-        <div className="pricing-grid">
-          {[
-            {tier:"Starter",price:"149",desc:"For smaller developers screening sites and running early-stage appraisals.",features:["10 appraisals per month","Full cost breakdown","Cash flow modelling","PDF export","1 user seat"],featured:false},
-            {tier:"Professional",price:"299",desc:"For active developers and QS practices running multiple schemes at once.",features:["Unlimited appraisals","All Starter features","Sensitivity analysis","BTR vs BTS comparison","Residual land value","3 user seats","Priority support"],featured:true},
-            {tier:"Enterprise",price:"499",desc:"For larger developers and consultancies managing a pipeline of opportunities.",features:["Everything in Professional","Unlimited user seats","API access","Custom branded reports","Dedicated onboarding","SLA guarantee"],featured:false},
-          ].map((p,i)=>(
-            <div key={i} className={`price-card ${p.featured?"featured":""}`}>
-              {p.featured&&<div className="price-featured-badge">Most popular</div>}
-              <div className="price-tier">{p.tier}</div>
-              <div className="price-amount"><span>€</span>{p.price}</div>
-              <div className="price-period">per seat / month</div>
-              <p className="price-desc">{p.desc}</p>
-              <ul className="price-features">{p.features.map((f,j)=><li key={j}>{f}</li>)}</ul>
-              <button className={`price-btn ${p.featured?"featured-btn":""}`} onClick={()=>document.getElementById("waitlist").scrollIntoView({behavior:"smooth"})}>
-                {p.featured?"Get early access →":"Join waitlist →"}
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* WAITLIST */}
       <section className="waitlist" id="waitlist">
         <div className="waitlist-inner">
